@@ -8,7 +8,7 @@ $result = $conn->query("SELECT * FROM products");
 <html>
 <head>
     <title>Produk | Rumah Jamur</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="asset/style.css">
     <style>
         .product-grid {
             display: grid;
@@ -63,8 +63,7 @@ $result = $conn->query("SELECT * FROM products");
     <b><img width="30px" src="https://i.imgur.com/nDqzOji.png"> Rumah Jamur</b>
     <nav>
         <a href="index.php">Home</a>
-        <a href="products.php">Produk</a>
-        <a href="login.php">Login</a>
+        <a href="keranjang/cart.php">Keranjang</a>
     </nav>
 </header>
 
@@ -80,7 +79,7 @@ $result = $conn->query("SELECT * FROM products");
         <img src="<?php echo $row['image_url']; ?>" style="width:100%; height:180px; object-fit:cover;">
         <h3><?php echo $row['name']; ?></h3>
         <p>Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></p>
-        <a href="product_detail.php?id=<?php echo $row['id']; ?>">Lihat Detail</a>
+        <a href="keranjang/product_detail.php?id=<?php echo $row['id']; ?>">Lihat Detail</a>
     </div>
 
 <?php endwhile; ?>

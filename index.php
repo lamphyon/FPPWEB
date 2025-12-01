@@ -3,7 +3,7 @@
 <head>
     <title>Rumah Jamur</title>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="asset/style.css">
 </head>
 <body>
 
@@ -14,8 +14,8 @@
         </b>
         <nav>
             <a href="product.php">Produk</a>
-            <a href="login.php">Login</a>
-            <a href="register.php">Daftar</a>
+            <a href="user/login.php">Login</a>
+            <a href="user/register.php">Daftar</a>
         </nav>
     </header>
 
@@ -44,8 +44,7 @@
         <h2 style="font-size: 25pt;">Promo Spesial!</h2>
         <h2 style="font-size: 25pt;">Dapatkan diskon <b>10%</b> untuk pembelian di atas Rp200.000! </h2>
 
-        <!-- Tombol promo → arahkan ke products.php -->
-        <a href="products.php" class="tombol">Beli Sekarang</a>
+        <a href="product.php" class="tombol">Beli Sekarang</a>
         <p style="font-size: smaller;">S&K berlaku.</p>
     </div>
 
