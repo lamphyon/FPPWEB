@@ -26,7 +26,7 @@ $stmt->execute();
 $cart = $stmt->get_result();
 
 if ($cart->num_rows === 0) {
-    die("<h2>Keranjang kosong, tidak bisa checkout.</h2><a href='product.php'>Kembali</a>");
+    die("<h2>Keranjang kosong, tidak bisa checkout.</h2><a href='../product.php'>Kembali</a>");
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h2>Checkout berhasil!</h2>
     <p>Terima kasih, pesanan Anda sudah dibuat.</p>
     <p><b>ID Pesanan: #$order_id</b></p>
-    <a class='tombol' href='product.php'>Kembali ke Produk</a>
+    <a class='tombol' href='../product.php'>Kembali ke Produk</a>
     ";
     exit;
 }
@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <textarea name="address" rows="4" required></textarea>
 
         <br><br>
-        <a href="" class="tombol">Konfirmasi Pesanan</a>
+        <button type="submit" class="tombol">Konfirmasi Pesanan</button>
     </form>
 
 </div>

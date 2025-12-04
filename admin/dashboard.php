@@ -39,7 +39,7 @@ $jml_user = count(query("SELECT * FROM users"));
             <a href="dashboard.php">Dashboard</a>
             <a href="manage_products.php">Kelola Produk</a>
             <a href="orders.php">Data Pesanan</a>
-            <a href="../logout.php" style="color:red;">Logout</a>
+            <a href="../user/logout.php" style="color:red;">Logout</a>
         </div>
         <hr>
 

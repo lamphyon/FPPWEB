@@ -44,8 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             Rumah Jamur
         </b>
         <nav>
-            <a href="index.php">Home</a>
-            <a href="product.php">Produk</a>
+            <a href="../index.php">Home</a>
+            <a href="../product.php">Produk</a>
         </nav>
     </header>
 

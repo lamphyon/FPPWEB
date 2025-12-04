@@ -82,7 +82,7 @@ $result = $stmt->get_result();
 
 <header>
     <b><img src="https://i.imgur.com/nDqzOji.png" width="30"> Rumah Jamur</b>
-    <nav><a href="product.php">Kembali ke Produk</a></nav>
+    <nav><a href="../product.php">Kembali ke Produk</a></nav>
 </header>
 
 

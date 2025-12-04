@@ -97,7 +97,7 @@ header a:hover {
 
 
 .tombol {
-    display: inline-block;
+    display: inline-flex;
     background: linear-gradient(145deg, #c7e096, #849377);
     color: #fff;
     border: none;

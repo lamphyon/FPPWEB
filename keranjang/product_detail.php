@@ -71,7 +71,8 @@ $product = $result->fetch_assoc();
         }
         .product-controls {
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
             gap: 10px;
         }
         .qty-input {
@@ -91,6 +92,20 @@ $product = $result->fetch_assoc();
         .superbutton span {
             display: inline-flex;
         }
+        .add-to-cart {
+            width: auto;
+            border-radius: 40px;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;               
+        }
+        .add-to-cart p {
+            margin: 0;
+            font-size: 14pt;
+            color: white;
+        }
     </style>
 </head>
 
@@ -99,7 +114,9 @@ $product = $result->fetch_assoc();
 <header>
     <b><img width="30px" src="https://i.imgur.com/nDqzOji.png"> Rumah Jamur</b>
     <nav>
-        <a href="cart.php">Lihat Keranjang</a>
+        <a href="../index.php">Home</a>
+        <a href="../product.php">Etalase</a>
+        <a href="cart.php">Keranjang</a>
     </nav>
 </header>
 
@@ -131,31 +148,30 @@ $product = $result->fetch_assoc();
         <?php else: ?>
             <form action="add_to_cart.php" method="POST" class="product-controls">
                 <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-
-                <input type="number" id="qty" name="quantity" class="qty-input" value="1" min="1">
-                <br><br>
+                <br><br><br>
                 <div class="superbutton">
                     <span>
                         <button type="button" class="icon-btn" onclick="changeQty(-1)">
                             <img src="https://pngimg.com/uploads/minus/minus_PNG41.png">
                         </button>
                     </span>
+                    <input type="number" id="qty" name="quantity" class="qty-input" value="1" min="1">
                     <span>
                         <button type="button" class="icon-btn" onclick="changeQty(1)"> 
                             <img src="https://i.imgur.com/n1GdYhC.png">
                         </button>
                     </span>
+                </div>
+                <div class="superbutton">
                     <span>
-                        <button type="submit" class="icon-btn">
+                        <button type="submit" class="icon-btn add-to-cart">
+                            <p>Tambahkan ke keranjang</p>
                             <img src="https://i.imgur.com/DzQSEf3.png">
                         </button>
                     </span>
                 </div>
             </form>
         <?php endif; ?>
-
-        <br><br><br><br>
-        <a class="tombol" href="product.php">Kembali ke Produk</a>
     </div>
 </div>
 

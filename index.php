@@ -1,21 +1,63 @@
+<?php
+session_start();
+include 'connect.php';
+?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Rumah Jamur</title>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="asset/style.css">
+    <style>
+        .floating-profile {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+        }
+        .floating-profile a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 55px;
+            height: 55px;
+            background: #c7e096;
+            color: white;
+            text-decoration: none;
+            font-size: 28px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: 0.2s ease;
+        }
+        .floating-profile a:hover {
+            background: #849377;
+            transform: scale(1.1);
+        }
+        .floating-profile img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body>
-
     <header>
         <b>
             <img width="30px" src="https://i.imgur.com/nDqzOji.png">
             Rumah Jamur
         </b>
         <nav>
-            <a href="product.php">Produk</a>
-            <a href="user/login.php">Login</a>
-            <a href="user/register.php">Daftar</a>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <a href="product.php">Produk</a>
+                <a href="cart.php">Keranjang</a>
+                <a href="user/profile.php">Profil</a>
+                <a href="user/logout.php">Keluar</a>
+            <?php else: ?>
+                <a href="product.php">Produk</a>
+                <a href="user/login.php">Login</a>
+                <a href="user/register.php">Daftar</a>
+            <?php endif; ?>
         </nav>
     </header>
 
@@ -47,8 +89,15 @@
         <a href="product.php" class="tombol">Beli Sekarang</a>
         <p style="font-size: smaller;">S&K berlaku.</p>
     </div>
+    
+    <?php if (isset($_SESSION['user_id'])): ?>
+    <div class="floating-profile">
+        <a href="user/profile.php">
+            <img src="https://i.imgur.com/TjLhkFO.png">
+        </a>
+    </div>
+    <?php endif; ?>
 
     <?php include 'footer.php'; ?>
-
 </body>
 </html>
