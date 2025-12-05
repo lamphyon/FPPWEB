@@ -142,8 +142,8 @@ $product = $result->fetch_assoc();
                 <b>Anda belum login!</b><br>
                 Silakan login untuk menambahkan produk ke keranjang.
                 <br><br>
-                <a class="tombol" href="login.php" style="background:#8b5;">Login</a>
-                <a class="tombol" href="register.php" style="background:#555;">Register</a>
+                <a class="tombol" href="../user/login.php" style="background:#8b5;">Login</a>
+                <a class="tombol" href="../user/register.php" style="background:#555;">Register</a>
             </div>
         <?php else: ?>
             <form action="add_to_cart.php" method="POST" class="product-controls">

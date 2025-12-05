@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <h3>Data Pengiriman</h3>
 
-    <form method="POST">
+    <form method="POST" action="../create_payment.php">
         <label>Nama Lengkap:</label>
         <input type="text" name="name" required>
 
@@ -172,6 +172,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <?php include "../footer.php"; ?>
-exit;
 </body>
 </html>
