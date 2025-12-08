@@ -11,7 +11,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $result = $conn->query("SELECT * FROM users WHERE email='$email'");
 
-    // dari sini
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
 
@@ -71,6 +70,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <p style="text-align:center;">Belum punya akun? <a href="register.php" class="no-underline">Register</a></p>
-
 </body>
 </html>

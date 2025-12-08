@@ -125,52 +125,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+    <header>
+        <b><img src="https://i.imgur.com/nDqzOji.png" width="30"> Rumah Jamur</b>
+    </header>
 
-<header>
-    <b><img src="https://i.imgur.com/nDqzOji.png" width="30"> Rumah Jamur</b>
-</header>
+    <div class="checkout-container">
 
-<div class="checkout-container">
+        <h2>Checkout</h2>
 
-    <h2>Checkout</h2>
+        <div class="order-summary">
+            <h3>Ringkasan Pesanan:</h3>
+            <ul>
+                <?php
+                $total = 0;
+                foreach ($cart as $item):
+                    $subtotal = $item['price'] * $item['quantity'];
+                    $total += $subtotal;
+                ?>
+                    <li>
+                        <?php echo $item['name']; ?> (x<?php echo $item['quantity']; ?>)
+                        — Rp <?php echo number_format($subtotal, 0, ',', '.'); ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
 
-    <div class="order-summary">
-        <h3>Ringkasan Pesanan:</h3>
-        <ul>
-            <?php
-            $total = 0;
-            foreach ($cart as $item):
-                $subtotal = $item['price'] * $item['quantity'];
-                $total += $subtotal;
-            ?>
-                <li>
-                    <?php echo $item['name']; ?> (x<?php echo $item['quantity']; ?>)
-                    — Rp <?php echo number_format($subtotal, 0, ',', '.'); ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
+            <p><b>Total: Rp <?php echo number_format($total, 0, ',', '.'); ?></b></p>
+        </div>
 
-        <p><b>Total: Rp <?php echo number_format($total, 0, ',', '.'); ?></b></p>
+        <h3>Data Pengiriman</h3>
+
+        <form method="POST" action="../create_payment.php">
+            <label>Nama Lengkap:</label>
+            <input type="text" name="name" required>
+
+            <label>No. Telepon:</label>
+            <input type="text" name="phone" required>
+
+            <label>Alamat Lengkap:</label>
+            <textarea name="address" rows="4" required></textarea>
+
+            <br><br>
+            <button type="submit" class="tombol">Konfirmasi Pesanan</button>
+        </form>
+
     </div>
 
-    <h3>Data Pengiriman</h3>
-
-    <form method="POST" action="../create_payment.php">
-        <label>Nama Lengkap:</label>
-        <input type="text" name="name" required>
-
-        <label>No. Telepon:</label>
-        <input type="text" name="phone" required>
-
-        <label>Alamat Lengkap:</label>
-        <textarea name="address" rows="4" required></textarea>
-
-        <br><br>
-        <button type="submit" class="tombol">Konfirmasi Pesanan</button>
-    </form>
-
-</div>
-
-<?php include "../footer.php"; ?>
+    <?php include "../footer.php"; ?>
 </body>
 </html>

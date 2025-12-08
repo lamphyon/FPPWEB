@@ -110,81 +110,79 @@ $product = $result->fetch_assoc();
 </head>
 
 <body>
+    <header>
+        <b><img width="30px" src="https://i.imgur.com/nDqzOji.png"> Rumah Jamur</b>
+        <nav>
+            <a href="../index.php">Home</a>
+            <a href="../product.php">Etalase</a>
+            <a href="cart.php">Keranjang</a>
+        </nav>
+    </header>
 
-<header>
-    <b><img width="30px" src="https://i.imgur.com/nDqzOji.png"> Rumah Jamur</b>
-    <nav>
-        <a href="../index.php">Home</a>
-        <a href="../product.php">Etalase</a>
-        <a href="cart.php">Keranjang</a>
-    </nav>
-</header>
+    <div class="detail-container">
+        <img src="<?php echo $product['image_url']; ?>" alt="">
+        
+        <div class="detail-info">
+            <h2><?php echo $product['name']; ?></h2>
+            <p class="price">Rp <?php echo number_format($product['price'], 0, ',', '.'); ?></p>
+            <p><?php echo $product['description']; ?></p>
 
-<div class="detail-container">
-    <img src="<?php echo $product['image_url']; ?>" alt="">
-    
-    <div class="detail-info">
-        <h2><?php echo $product['name']; ?></h2>
-        <p class="price">Rp <?php echo number_format($product['price'], 0, ',', '.'); ?></p>
-        <p><?php echo $product['description']; ?></p>
+            <br>
 
-        <br>
-
-        <!-- Login/register warning -->
-        <?php if (!isset($_SESSION['user_id'])): ?>
-            <div style="
-                background:#ffdddd;
-                border-left:5px solid #d9534f;
-                padding:15px;
-                border-radius:8px;
-                margin:20px 0;
-            ">
-                <b>Anda belum login!</b><br>
-                Silakan login untuk menambahkan produk ke keranjang.
-                <br><br>
-                <a class="tombol" href="../user/login.php" style="background:#8b5;">Login</a>
-                <a class="tombol" href="../user/register.php" style="background:#555;">Register</a>
-            </div>
-        <?php else: ?>
-            <form action="add_to_cart.php" method="POST" class="product-controls">
-                <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                <br><br><br>
-                <div class="superbutton">
-                    <span>
-                        <button type="button" class="icon-btn" onclick="changeQty(-1)">
-                            <img src="https://pngimg.com/uploads/minus/minus_PNG41.png">
-                        </button>
-                    </span>
-                    <input type="number" id="qty" name="quantity" class="qty-input" value="1" min="1">
-                    <span>
-                        <button type="button" class="icon-btn" onclick="changeQty(1)"> 
-                            <img src="https://i.imgur.com/n1GdYhC.png">
-                        </button>
-                    </span>
+            <!-- Login/register warning -->
+            <?php if (!isset($_SESSION['user_id'])): ?>
+                <div style="
+                    background:#ffdddd;
+                    border-left:5px solid #d9534f;
+                    padding:15px;
+                    border-radius:8px;
+                    margin:20px 0;
+                ">
+                    <b>Anda belum login!</b><br>
+                    Silakan login untuk menambahkan produk ke keranjang.
+                    <br><br>
+                    <a class="tombol" href="../user/login.php" style="background:#8b5;">Login</a>
+                    <a class="tombol" href="../user/register.php" style="background:#555;">Register</a>
                 </div>
-                <div class="superbutton">
-                    <span>
-                        <button type="submit" class="icon-btn add-to-cart">
-                            <p>Tambahkan ke keranjang</p>
-                            <img src="https://i.imgur.com/DzQSEf3.png">
-                        </button>
-                    </span>
-                </div>
-            </form>
-        <?php endif; ?>
+            <?php else: ?>
+                <form action="add_to_cart.php" method="POST" class="product-controls">
+                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                    <br><br><br>
+                    <div class="superbutton">
+                        <span>
+                            <button type="button" class="icon-btn" onclick="changeQty(-1)">
+                                <img src="https://pngimg.com/uploads/minus/minus_PNG41.png">
+                            </button>
+                        </span>
+                        <input type="number" id="qty" name="quantity" class="qty-input" value="1" min="1">
+                        <span>
+                            <button type="button" class="icon-btn" onclick="changeQty(1)"> 
+                                <img src="https://i.imgur.com/n1GdYhC.png">
+                            </button>
+                        </span>
+                    </div>
+                    <div class="superbutton">
+                        <span>
+                            <button type="submit" class="icon-btn add-to-cart">
+                                <p>Tambahkan ke keranjang</p>
+                                <img src="https://i.imgur.com/DzQSEf3.png">
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            <?php endif; ?>
+        </div>
     </div>
-</div>
 
-<?php include "../footer.php"; ?>
+    <?php include "../footer.php"; ?>
 
-<script>
-function changeQty(amount) {
-    let qty = document.getElementById("qty");
-    let value = parseInt(qty.value) + amount;
-    if (value < 1) value = 1;
-    qty.value = value;
-}
-</script>
-
+    <script>
+    function changeQty(amount) {
+        let qty = document.getElementById("qty");
+        let value = parseInt(qty.value) + amount;
+        if (value < 1) value = 1;
+        qty.value = value;
+    }
+    </script>
 </body>
 </html>

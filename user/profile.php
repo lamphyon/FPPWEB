@@ -11,11 +11,12 @@ $user_id = intval($_SESSION["user_id"]);
 $user_name = htmlspecialchars($_SESSION["user_name"], ENT_QUOTES, 'UTF-8');
 
 $stmt = $conn->prepare("
-    SELECT id, total_price, customer_name, customer_phone, customer_address, created_at
+    SELECT id, user_id, total_price, customer_name, customer_phone, customer_address, created_at
     FROM orders
     WHERE user_id = ?
     ORDER BY created_at DESC
 ");
+
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $orders_result = $stmt->get_result();
@@ -132,122 +133,143 @@ $stmt->close();
     </style>
 </head>
 <body>
+        <header>
+        <b>
+            <img width="30px" src="https://i.imgur.com/nDqzOji.png">
+            Rumah Jamur
+        </b>
+        <nav>
+            <a href="../index.php">Home</a>
+            <a href="../product.php">Produk</a>
+            <a href="../keranjang/cart.php">Keranjang</a>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="profile-head">
+            <div class="avatar"><?= strtoupper(substr($user_name,0,1)) ?></div>
+            <div class="profile-info">
+                <h1>Halo, <?= $user_name ?></h1>
+                <p class="small">Terima kasih sudah menjadi pelanggan Rumah Jamur. Berikut ringkasan pesanan & riwayat belanja Anda.</p>
+            </div>
 
-<div class="container">
-    <div class="profile-head">
-        <div class="avatar"><?= strtoupper(substr($user_name,0,1)) ?></div>
-        <div class="profile-info">
-            <h1>Halo, <?= $user_name ?></h1>
-            <p class="small">Terima kasih sudah menjadi pelanggan Rumah Jamur. Berikut ringkasan pesanan & riwayat belanja Anda.</p>
+            <div class="actions">
+                <a class="btn btn-primary" href="logout.php">Logout</a>
+            </div>
         </div>
 
-        <div class="actions">
-            <a class="btn btn-primary" href="../product.php">Lanjut Belanja</a>
-            <a class="btn btn-primary" href="logout.php">Logout</a>
-        </div>
+        <h2 style="margin-top:22px;">Riwayat Pesanan</h2>
+
+        <?php if (empty($orders)): ?>
+            <div class="empty">
+                <p class="small">Belum ada pesanan.</p>
+                <p>Mulai berbelanja dan pesanan Anda akan muncul di sini.</p>
+                <br>
+                <a class="tombol" href="../product.php">Belanja Sekarang</a>
+            </div>
+        <?php else: ?>
+            <div class="orders-list">
+                <?php foreach ($orders as $order): 
+                    $order_id = intval($order['id']);
+                    $total_price = intval($order['total_price']);
+                    $created = htmlspecialchars($order['created_at'], ENT_QUOTES, 'UTF-8');
+
+                    $s = $conn->prepare("
+                        SELECT oi.quantity, oi.price, p.name, p.image_url
+                        FROM order_items oi
+                        JOIN products p ON oi.product_id = p.id
+                        WHERE oi.order_id = ?
+                    ");
+                    $s->bind_param("i", $order_id);
+                    $s->execute();
+                    $items_res = $s->get_result();
+                    $items = $items_res->fetch_all(MYSQLI_ASSOC);
+                    $s->close();
+                ?>
+                <div class="order-card" id="order-<?= $order_id ?>">
+                    <div class="order-header">
+                        <div class="order-meta">
+                            <h3>Pesanan #<?= $order_id ?></h3>
+                            <div class="muted">Tanggal: <?= $created ?> • Penerima: <?= htmlspecialchars($order['customer_name'], ENT_QUOTES, 'UTF-8') ?></div>
+                        </div>
+
+                        <div class="order-right">
+                            <div class="badge">Rp <?= number_format($total_price,0,',','.') ?></div>
+                            <div class="small" style="margin-top:8px;">Jumlah item: <?= array_sum(array_column($items,'quantity')) ?></div>
+                            <div style="margin-top:8px;">
+                                <button class="tombol" onclick="toggleDetails(<?= $order_id ?>)">Detail</button>
+                                <button class="tombol" onclick="printOrder(<?= $order_id ?>)">Cetak</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-details" id="details-<?= $order_id ?>">
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th>Produk</th>
+                                    <th>Harga</th>
+                                    <th>Qty</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($items as $it):
+                                $subtotal = $it['price'] * $it['quantity'];
+                            ?>
+                                <tr>
+                                    <td>
+                                        <div style="display:flex;gap:12px;align-items:center">
+                                            <img src="<?= htmlspecialchars($it['image_url'], ENT_QUOTES, 'UTF-8') ?>" alt="">
+                                            <div><?= htmlspecialchars($it['name'], ENT_QUOTES, 'UTF-8') ?></div>
+                                        </div>
+                                    </td>
+                                    <td>Rp <?= number_format($it['price'],0,',','.') ?></td>
+                                    <td><?= intval($it['quantity']) ?></td>
+                                    <td>Rp <?= number_format($subtotal,0,',','.') ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+
+                        <div class="order-footer">
+                            <div>
+                                <div class="small">Alamat pengiriman:</div>
+                                <div><?= nl2br(htmlspecialchars($order['customer_address'], ENT_QUOTES, 'UTF-8')) ?></div>
+                                <div class="small" style="margin-top:6px;">Telepon: <?= htmlspecialchars($order['customer_phone'], ENT_QUOTES, 'UTF-8') ?></div>
+                            </div>
+                            <div style="text-align:right">
+                                <div class="small">Total:</div>
+                                <div style="font-weight:700; font-size:18px; margin-top:6px;">Rp <?= number_format($total_price,0,',','.') ?></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
     </div>
 
-    <h2 style="margin-top:22px;">Riwayat Pesanan</h2>
+    <?php include "../footer.php"; ?>
 
-    <?php if (empty($orders)): ?>
-        <div class="empty">
-            <p class="small">Belum ada pesanan.</p>
-            <p>Mulai berbelanja dan pesanan Anda akan muncul di sini.</p>
-            <br>
-            <a class="tombol" href="../product.php">Belanja Sekarang</a>
-        </div>
-    <?php else: ?>
-        <div class="orders-list">
-            <?php foreach ($orders as $order): 
-                $order_id = intval($order['id']);
-                $total_price = intval($order['total_price']);
-                $created = htmlspecialchars($order['created_at'], ENT_QUOTES, 'UTF-8');
+    <script>
+        function printOrder(orderId) {
+            const card = document.getElementById("order-" + orderId);
+            const details = document.getElementById("details-" + orderId);
+            if (!card) return;
+            if (details) details.style.display = "block";
+            const original = document.body.innerHTML;
+            document.body.innerHTML = card.outerHTML;
+            window.print();
+            document.body.innerHTML = original;
+            location.reload();
+        }
 
-                $s = $conn->prepare("
-                    SELECT oi.quantity, oi.price, p.name, p.image_url
-                    FROM order_items oi
-                    JOIN products p ON oi.product_id = p.id
-                    WHERE oi.order_id = ?
-                ");
-                $s->bind_param("i", $order_id);
-                $s->execute();
-                $items_res = $s->get_result();
-                $items = $items_res->fetch_all(MYSQLI_ASSOC);
-                $s->close();
-            ?>
-            <div class="order-card" id="order-<?= $order_id ?>">
-                <div class="order-header">
-                    <div class="order-meta">
-                        <h3>Pesanan #<?= $order_id ?></h3>
-                        <div class="muted">Tanggal: <?= $created ?> • Penerima: <?= htmlspecialchars($order['customer_name'], ENT_QUOTES, 'UTF-8') ?></div>
-                    </div>
-
-                    <div class="order-right">
-                        <div class="badge">Rp <?= number_format($total_price,0,',','.') ?></div>
-                        <div class="small" style="margin-top:8px;">Jumlah item: <?= array_sum(array_column($items,'quantity')) ?></div>
-                        <div style="margin-top:8px;">
-                            <button class="tombol" onclick="toggleDetails(<?= $order_id ?>)">Detail</button>
-                            <button class="tombol" onclick="window.print()">Cetak</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="order-details" id="details-<?= $order_id ?>">
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th>Produk</th>
-                                <th>Harga</th>
-                                <th>Qty</th>
-                                <th>Subtotal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($items as $it):
-                            $subtotal = $it['price'] * $it['quantity'];
-                        ?>
-                            <tr>
-                                <td>
-                                    <div style="display:flex;gap:12px;align-items:center">
-                                        <img src="<?= htmlspecialchars($it['image_url'], ENT_QUOTES, 'UTF-8') ?>" alt="">
-                                        <div><?= htmlspecialchars($it['name'], ENT_QUOTES, 'UTF-8') ?></div>
-                                    </div>
-                                </td>
-                                <td>Rp <?= number_format($it['price'],0,',','.') ?></td>
-                                <td><?= intval($it['quantity']) ?></td>
-                                <td>Rp <?= number_format($subtotal,0,',','.') ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-
-                    <div class="order-footer">
-                        <div>
-                            <div class="small">Alamat pengiriman:</div>
-                            <div><?= nl2br(htmlspecialchars($order['customer_address'], ENT_QUOTES, 'UTF-8')) ?></div>
-                            <div class="small" style="margin-top:6px;">Telepon: <?= htmlspecialchars($order['customer_phone'], ENT_QUOTES, 'UTF-8') ?></div>
-                        </div>
-                        <div style="text-align:right">
-                            <div class="small">Total:</div>
-                            <div style="font-weight:700; font-size:18px; margin-top:6px;">Rp <?= number_format($total_price,0,',','.') ?></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
-</div>
-
-<?php include "../footer.php"; ?>
-
-<script>
-function toggleDetails(id){
-    const el = document.getElementById('details-' + id);
-    if(!el) return;
-    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-}
-</script>
+        function toggleDetails(id){
+            const element = document.getElementById('details-' + id);
+            if(!element) return;
+            element.style.display = (element.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
 </body>
 </html>

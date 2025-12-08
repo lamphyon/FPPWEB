@@ -51,7 +51,6 @@ include 'connect.php';
             <?php if (isset($_SESSION['user_id'])): ?>
                 <a href="product.php">Produk</a>
                 <a href="cart.php">Keranjang</a>
-                <a href="user/profile.php">Profil</a>
                 <a href="user/logout.php">Keluar</a>
             <?php else: ?>
                 <a href="product.php">Produk</a>
@@ -63,16 +62,16 @@ include 'connect.php';
 
     <div class="hero"><h1>Yuk Beli <br> Jamur!!</h1></div>
 
-<div class="section" id="opening"> 
-    <p> 
-    Tahukah kamu bahwa produksi produk hewani menjadi salah satu penyumbang gas rumah kaca terbesar 
-    di dunia? Sebagai langkah awal dalam usaha menyelamatkan bumi, kini saatnya beralih ke pilihan makanan yang lebih ramah 
-    lingkungan—tanpa mengorbankan rasa. Produk olahan jamur hadir sebagai solusi lezat, sehat, dan berkelanjutan. 
-    Dengan tekstur yang mirip daging, kaya nutrisi, dan dapat diolah dalam berbagai menu, 
-    jamur menjadi alternatif modern yang bukan hanya baik untuk tubuh, tetapi juga untuk planet kita. 
-    Yuk, mulai gaya hidup baru yang lebih hijau dengan menikmati kelezatan olahan jamur! 
-    </p> 
-</div>
+    <div class="section" id="opening"> 
+        <p> 
+        Tahukah kamu bahwa produksi produk hewani menjadi salah satu penyumbang gas rumah kaca terbesar 
+        di dunia? Sebagai langkah awal dalam usaha menyelamatkan bumi, kini saatnya beralih ke pilihan makanan yang lebih ramah 
+        lingkungan—tanpa mengorbankan rasa. Produk olahan jamur hadir sebagai solusi lezat, sehat, dan berkelanjutan. 
+        Dengan tekstur yang mirip daging, kaya nutrisi, dan dapat diolah dalam berbagai menu, 
+        jamur menjadi alternatif modern yang bukan hanya baik untuk tubuh, tetapi juga untuk planet kita. 
+        Yuk, mulai gaya hidup baru yang lebih hijau dengan menikmati kelezatan olahan jamur! 
+        </p> 
+    </div>
 
     <div class="section" id="testimoni">
         <h2>Testimoni pelanggan</h2>
