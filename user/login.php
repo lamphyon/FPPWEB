@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $result = $conn->query("SELECT * FROM users WHERE email='$email'");
 
+    // dari sini
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
 
@@ -18,11 +19,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $_SESSION["user_id"] = $user["id"];
             $_SESSION["user_name"] = $user["name"];
+            $_SESSION["email"] = $user["email"]; 
 
-            header("Location: profile.php");
+            if ($user["email"] == "admin@admin.com") {
+                header("Location: ../admin/dashboard.php");
+            } 
+            else {
+                header("Location: profile.php");
+            }
             exit;
-
-        } else {
+        }
+        else {
             $message = "Password salah!";
         }
     } else {
