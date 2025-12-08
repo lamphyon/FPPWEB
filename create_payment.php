@@ -58,7 +58,7 @@ foreach ($data as $item) {
 }
 
 
-$serverKey = getenv('MIDTRANS_SERVER_KEY');
+$server_key = "Serverkey(ganti)";
 
 $payload = [
     "transaction_details" => [
