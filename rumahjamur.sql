@@ -121,6 +121,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
 (1, 'tester', 'tester@email.id', '$2y$10$7Ult.6VQzhn8aRZNxcWU2O.Z6HuYvNHmBkHnQfQkRxxX8hFuUkVeC');
+(2, 'hai', 'admin@admin.com', '$2y$10$t4y8wwPeUgdgmYKbHNkjzOOM/hIZEeRow4aCxWl3SXMCTkbXdFqBe');
 
 --
 -- Indexes for dumped tables
