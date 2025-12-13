@@ -8,9 +8,9 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-$name    = $_POST['name'];
-$phone   = $_POST['phone'];
-$address = $_POST['address'];
+$name    = $_POST['name'] ?? null;
+$phone   = $_POST['phone'] ?? null;
+$address = $_POST['address'] ?? null;
 
 if (!$name || !$phone || !$address) {
     die("Data tidak lengkap.");
@@ -57,8 +57,8 @@ foreach ($data as $item) {
     $stmt->close();
 }
 
-
-$server_key = "Serverkey(ganti)";
+$server_key = getenv("MIDTRANS_SERVER_KEY");
+$app_url    = getenv("APP_URL");
 
 $payload = [
     "transaction_details" => [
@@ -70,7 +70,7 @@ $payload = [
         "phone" => $phone
     ],
     "callbacks" => [
-        "finish" => "http://localhost/FPPWEB/user/profile.php"
+        "finish" => $app_url . "/user/profile.php"
     ]
 ];
 
@@ -90,13 +90,11 @@ curl_close($ch);
 
 $response = json_decode($result, true);
 
-if (isset($response["token"])) {
-    $payment_url = $response["redirect_url"];
-    header("Location: " . $payment_url);
+if (isset($response["redirect_url"])) {
+    header("Location: " . $response["redirect_url"]);
     exit;
 } else {
     echo "Gagal membuat pembayaran:<br>";
     var_dump($response);
 }
-
 ?>
