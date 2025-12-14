@@ -212,3 +212,7 @@ CREATE TABLE payments (
 
 ALTER TABLE orders
   ADD COLUMN status ENUM('pending','paid','failed') NOT NULL DEFAULT 'pending';
+
+ALTER TABLE orders
+ADD COLUMN midtrans_order_id VARCHAR(100) UNIQUE;
+
