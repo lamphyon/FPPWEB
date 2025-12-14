@@ -50,7 +50,7 @@ include 'connect.php';
         <nav>
             <?php if (isset($_SESSION['user_id'])): ?>
                 <a href="product.php">Produk</a>
-                <a href="cart.php">Keranjang</a>
+                <a href="keranjang/cart.php">Keranjang</a>
                 <a href="user/logout.php">Keluar</a>
             <?php else: ?>
                 <a href="product.php">Produk</a>

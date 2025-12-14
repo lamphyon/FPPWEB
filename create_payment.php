@@ -7,7 +7,6 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-
 $name    = $_POST['name'] ?? null;
 $phone   = $_POST['phone'] ?? null;
 $address = $_POST['address'] ?? null;
