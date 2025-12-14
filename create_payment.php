@@ -32,23 +32,37 @@ while ($row = $data->fetch_assoc()) {
 }
 
 $stmt = $conn->prepare("
-    INSERT INTO orders (user_id, total_price, customer_name, customer_phone, customer_address)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO orders 
+    (user_id, total_price, customer_name, customer_phone, customer_address, status)
+    VALUES (?, ?, ?, ?, ?, 'pending')
 ");
 $stmt->bind_param("iisss", $user_id, $total, $name, $phone, $address);
 $stmt->execute();
-$order_id = $stmt->insert_id;
+
+$order_db_id = $stmt->insert_id; 
+$stmt->close();
+
+$midtrans_order_id = "RJ-" . date("YmdHis") . "-" . $order_db_id;
+
+$stmt = $conn->prepare("
+    UPDATE orders 
+    SET midtrans_order_id = ? 
+    WHERE id = ?
+");
+$stmt->bind_param("si", $midtrans_order_id, $order_db_id);
+$stmt->execute();
 $stmt->close();
 
 $data->data_seek(0);
 foreach ($data as $item) {
     $stmt = $conn->prepare("
-        INSERT INTO order_items (order_id, product_id, quantity, price)
+        INSERT INTO order_items 
+        (order_id, product_id, quantity, price)
         VALUES (?, ?, ?, ?)
     ");
     $stmt->bind_param(
         "iiii",
-        $order_id,
+        $order_db_id,
         $item['product_id'],
         $item['quantity'],
         $item['price']
@@ -62,7 +76,7 @@ $app_url    = getenv("APP_URL");
 
 $payload = [
     "transaction_details" => [
-        "order_id" => $order_id,
+        "order_id" => $midtrans_order_id, 
         "gross_amount" => $total
     ],
     "customer_details" => [
@@ -75,7 +89,6 @@ $payload = [
 ];
 
 $ch = curl_init("https://app.sandbox.midtrans.com/snap/v1/transactions");
-
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
@@ -97,4 +110,3 @@ if (isset($response["redirect_url"])) {
     echo "Gagal membuat pembayaran:<br>";
     var_dump($response);
 }
-?>
