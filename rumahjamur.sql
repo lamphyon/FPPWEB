@@ -199,7 +199,7 @@ COMMIT;
 
 CREATE TABLE payments (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  order_id INT NOT NULL,
+  order_id VARCHAR(100) NOT NULL,
   amount INT NOT NULL,
   currency VARCHAR(8) DEFAULT 'IDR',
   provider VARCHAR(64) DEFAULT 'sandbox',
@@ -207,7 +207,7 @@ CREATE TABLE payments (
   status ENUM('pending','paid','failed') DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+  UNIQUE KEY uniq_order_id (order_id)
 );
 
 ALTER TABLE orders

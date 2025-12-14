@@ -10,7 +10,7 @@ if (!$data || !isset($data['order_id']) || !isset($data['transaction_status'])) 
     exit;
 }
 
-$order_id = intval($data['order_id']);
+$order_id = $data['order_id'];
 $tx_status = $data['transaction_status'];
 $tx_id = $data['transaction_id'] ?? null;
 
