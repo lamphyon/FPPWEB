@@ -199,7 +199,7 @@ COMMIT;
 
 CREATE TABLE payments (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  order_id VARCHAR(100) NOT NULL,
+  order_id INT NOT NULL,
   amount INT NOT NULL,
   currency VARCHAR(8) DEFAULT 'IDR',
   provider VARCHAR(64) DEFAULT 'sandbox',
@@ -207,11 +207,8 @@ CREATE TABLE payments (
   status ENUM('pending','paid','failed') DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY uniq_order_id (order_id)
+  FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 
 ALTER TABLE orders
   ADD COLUMN status ENUM('pending','paid','failed') NOT NULL DEFAULT 'pending';
-
-ALTER TABLE orders
-ADD COLUMN midtrans_order_id VARCHAR(100) UNIQUE;
