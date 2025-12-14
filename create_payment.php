@@ -16,9 +16,6 @@ if (!$name || !$phone || !$address) {
     die("Data tidak lengkap.");
 }
 
-/* =====================
-   AMBIL CART
-===================== */
 $stmt = $conn->prepare("
     SELECT cart_items.quantity, products.id AS product_id, products.price
     FROM cart_items 
@@ -34,9 +31,6 @@ while ($row = $data->fetch_assoc()) {
     $total += $row['price'] * $row['quantity'];
 }
 
-/* =====================
-   INSERT ORDER
-===================== */
 $stmt = $conn->prepare("
     INSERT INTO orders 
     (user_id, total_price, customer_name, customer_phone, customer_address, status)
@@ -45,15 +39,11 @@ $stmt = $conn->prepare("
 $stmt->bind_param("iisss", $user_id, $total, $name, $phone, $address);
 $stmt->execute();
 
-$order_db_id = $stmt->insert_id; // INT
+$order_db_id = $stmt->insert_id; 
 $stmt->close();
 
-/* =====================
-   ORDER ID MIDTRANS (STRING)
-===================== */
 $midtrans_order_id = "RJ-" . date("YmdHis") . "-" . $order_db_id;
 
-/* SIMPAN KE DB */
 $stmt = $conn->prepare("
     UPDATE orders 
     SET midtrans_order_id = ? 
@@ -63,9 +53,6 @@ $stmt->bind_param("si", $midtrans_order_id, $order_db_id);
 $stmt->execute();
 $stmt->close();
 
-/* =====================
-   INSERT ORDER ITEMS
-===================== */
 $data->data_seek(0);
 foreach ($data as $item) {
     $stmt = $conn->prepare("
@@ -84,15 +71,12 @@ foreach ($data as $item) {
     $stmt->close();
 }
 
-/* =====================
-   MIDTRANS
-===================== */
 $server_key = getenv("MIDTRANS_SERVER_KEY");
 $app_url    = getenv("APP_URL");
 
 $payload = [
     "transaction_details" => [
-        "order_id" => $midtrans_order_id, // ✅ STRING
+        "order_id" => $midtrans_order_id,
         "gross_amount" => $total
     ],
     "customer_details" => [

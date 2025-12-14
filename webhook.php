@@ -21,7 +21,6 @@ if (in_array($tx_status, ['settlement', 'capture'])) {
     $order_status = 'pending';
 }
 
-/* UPDATE ORDERS */
 $stmt = $conn->prepare("
     UPDATE orders 
     SET status = ? 
@@ -29,9 +28,8 @@ $stmt = $conn->prepare("
 ");
 $stmt->bind_param("ss", $order_status, $midtrans_order_id);
 $stmt->execute();
-$stmt->close();
+$stmt->close();     
 
-/* INSERT / UPDATE PAYMENTS */
 $stmt = $conn->prepare("
     INSERT INTO payments (order_id, status, provider_tx_id)
     VALUES (?, ?, ?)

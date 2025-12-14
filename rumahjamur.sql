@@ -215,4 +215,3 @@ ALTER TABLE orders
 
 ALTER TABLE orders
 ADD COLUMN midtrans_order_id VARCHAR(100) UNIQUE;
-
